@@ -1,7 +1,6 @@
 #я чарли
 import discord
 import random
-import config
 import os
 regt = ''
 namer=''
