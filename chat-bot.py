@@ -40,7 +40,7 @@ async def on_message(message):
         return
     if 'чарли' in regt:
         global namer
-        if 'leave' in regt == False or 'join' in regt == False:
+        if not 'leave' in regt or not 'join' in regt:
             msg = msg + redactname(str(message.author)) + ' '
         if otv(regt, priv):
             msg = msg + random.choice(privOtv) + '. '
