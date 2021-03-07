@@ -5,7 +5,7 @@ import os
 import gorodaspisok
 goroda = gorodaspisok.goroda
 gorodar = ''
-game = 1
+game = 0
 regt = ''
 namer=''
 msg = ''
@@ -48,7 +48,6 @@ def gorod(e,z):
         h = str.lower(g)
         if e[-1] == h[:1]:
             return g
-
 def gtr(v,d):
     global g
     if g[-1] == 'й':
@@ -88,7 +87,9 @@ async def on_message(message):
         if otv(regt, nastroi):
             msg = msg + random.choice(nastroiOtv) + '. '
         if 'что ты умеешь' in regt:
-            msg = msg + 'Я умею Общаться' + '. '
+            msg = msg + 'Я умею Общаться и играть в города' + '. '
+        if 'как начать играть' in regt:
+            msg = msg + 'Напиши мне: давай поиграем \n Чтобы закончить игру напиши: Спасибо за игру' + '. '
         if 'ты лучший' in regt:
             msg = msg + 'Спасибо)))' + '. '
         if 'пзц' in regt:
@@ -96,7 +97,7 @@ async def on_message(message):
         if 'давай поиграем' in regt and game == 0:
             msg = msg + 'давай ты начинаешь' + '. '
             game = 1
-        if 'я не хочу играть' in regt:
+        if 'спасибо за игру' in regt:
             msg = msg + 'Ну ладно(' + '. '
             game = 0
         if not msg == '':
