@@ -18,6 +18,7 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print('Connected {0.user}'.format(client))
+
 def redactname(nameret):
     global namer
     for i in nameret:
@@ -25,10 +26,12 @@ def redactname(nameret):
              break
          namer = namer + i
     return namer + ': '
+
 def otv(sms1, otvet):
     for q in otvet:
         if q in sms1:
             return True
+
 def gorod(e,z):
     global gorodar
     global g
@@ -63,6 +66,7 @@ def gtr(v,d):
             if v == th:
                 return True
         return False
+
 @client.event
 async def on_message(message):
     regt = str.lower(message.content)
