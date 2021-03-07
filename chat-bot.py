@@ -110,4 +110,4 @@ async def on_message(message):
     msg = ''
     namer = ''
 token = os.environ.get('tokencharli')
-client.run('ODEzNzMwNTI4MjM0NTY5NzYx.YDTjnA.fNEozLNFDy7l-O47KX5oAFPmkfE')
+client.run(str(token))
