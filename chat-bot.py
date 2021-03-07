@@ -1,14 +1,15 @@
 #я чарли
 import discord
-from discord.utils import get
 import random
 import os
-import youtube_dl
-yrlll = 'https://youtu.be/F4wIbPq6euM'
-smd = ''
+import gorodaspisok
+goroda = gorodaspisok.goroda
+gorodar = ''
+game = 1
 regt = ''
 namer=''
 msg = ''
+g = '$'
 priv = ['ку','привет','хай','здарова','добрый день','добрый вечер','доброе утро','hi','hello']
 privOtv = ['Привет','хай','Здарова','Здравствуй','Hello','Hi']
 nastroi = ['как дела','как ты','как успехи','как оно']
@@ -18,8 +19,8 @@ client = discord.Client()
 async def on_ready():
     print('Connected {0.user}'.format(client))
 def redactname(nameret):
+    global namer
     for i in nameret:
-         global namer
          if i == '#':
              break
          namer = namer + i
@@ -28,20 +29,56 @@ def otv(sms1, otvet):
     for q in otvet:
         if q in sms1:
             return True
-def smds():
-    smd = ''
+def gorod(e,z):
+    global gorodar
+    global g
+    global h
+    for f in e:
+        if f == 'ь' or f == 'ъ' or f == 'й':
+            break
+        gorodar = f
+    if e[-1] == 'й':
+        e.replace('й','')
+    if e[-1] == 'ь':
+        e.replace('ь','')
+    if e[-1] == 'ъ':
+        e.replace('ъ','')
+    for u in z:
+        g = random.choice(goroda)
+        h = str.lower(g)
+        if e[-1] == h[:1]:
+            return g
+
+def gtr(v,d):
+    global g
+    if g[-1] == 'й':
+        g.replace('й','')
+    if g[-1] == 'ь':
+        g.replace('ь','')
+    if g[-1] == 'ъ':
+        g.replace('ъ','')
+    if g[-1] == v[:1] or g == '$':
+        for t in d:
+            th = str.lower(t)
+            if v == th:
+                return True
+        return False
+def gorodd():
+     for t in goroda:
+        t = str.lower(t)
 @client.event
 async def on_message(message):
     regt = str.lower(message.content)
     sms = regt.replace('.', '').split()
     global name
+    global goroda
     global msg
+    global namer
+    global game
     if message.author == client.user:
         return
     if 'чарли' in regt:
-        global namer
-        if not 'leave' in regt or not 'join' in regt:
-            msg = msg + redactname(str(message.author)) + ' '
+        msg = msg + redactname(str(message.author)) + ' '
         if otv(regt, priv):
             msg = msg + random.choice(privOtv) + '. '
         if 'кто ты' in regt:
@@ -56,63 +93,21 @@ async def on_message(message):
             msg = msg + 'Спасибо)))' + '. '
         if 'пзц' in regt:
             msg = msg + 'Согласен' + '. '
-        print(message.author.id)
-        if msg != '':
+        if 'давай поиграем' in regt and game == 0:
+            msg = msg + 'давай ты начинаешь' + '. '
+            game = 1
+        if 'я не хочу играть' in regt:
+            msg = msg + 'Ну ладно(' + '. '
+            game = 0
+        if not msg == '':
             await message.channel.send(msg)
-    else:
-        global voice
-        if 'join' in regt:
-            channel = message.author.voice.channel
-            voice = get(client.voice_clients, guild = message.guild)
-            print('444555')
-            if voice and voice.is_connected():
-                await voice.move_to(channel)
-            else:
-                voice = await channel.connect()
-                await message.channel.send(f'Чарли присоединился к каналу: {channel}')
-        if 'leave' in regt:
-            channel = message.author.voice.channel
-            voice = get(client.voice_clients,guild = message.guild)
-            if voice and voice.is_connected():
-                await voice.disconnect()
-                await message.channel.send(f'Чарли отключился от канала: {channel}')
-        if 'play' in regt:
-            song_there = os.path.isfile('song.mp3')
-            try:
-                if song_there:
-                    os.remove('song.mp3')
-                    print('[log] Старый фаил удалён')
-            except PermissionError:
-                print('[log] не удалось удалить фаил')
-
-            await message.channel.send('Пожалуйста ожидайте')
-            voice = get(client.voice_clients, guild = message.guild)
-            print(voice)
-            ydl_opts = {
-                'format' : 'bestaudio/best',
-                'postprocessors' : [{
-                        'key' : 'FFmpegExtractAudio',
-                        'preferredcodec' : 'mp3',
-                        'preferredquality' : '192'
-                    }]
-                }
-            with youtube_dl.YoutubeDL({}) as ydl:
-                print('[log] Загружаем музыку...')
-                ydl.download([yrlll])
-            for file in os.listdir('./'):
-                print(file)
-                if file.endswith('.mp4') or file.endswith('.webm')or file.endswith('.mkv') :
-                    namemp3 = file
-                    print(f'[log] переименовываю фаил: {file}')
-                    os.rename(file, 'song.mp3')
-                    print(file)
-                    
-            voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print(f'[log] {namemp3}, музыка закончила своё проигрывание'))
-            voice.source = discord.PCMVolumeTransformer(voice.source)
-            vi=voice.source.volume = 0.07
-            song_name = namemp3.rsplit('-', 2)
-            await message.channel.send(f'Сейчас играет: {song_name[0]}')
+    elif game == 1:
+        if gtr(regt,goroda):
+            msg = gorod(regt,goroda)
+            await message.channel.send(msg)
+        else:
+            await message.channel.send('Я не нашёл такой город, Попробуй ещё раз')
     msg = ''
     namer = ''
 token = os.environ.get('tokencharli')
-client.run(str(token))
+client.run('ODEzNzMwNTI4MjM0NTY5NzYx.YDTjnA.fNEozLNFDy7l-O47KX5oAFPmkfE')
